@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TaskDao {
 
-    @Query("SELECT * FROM tasks")
-    fun getTasks(): Flow<List<Task>>
+    @Query("SELECT * FROM tasks WHERE title LIKE '%' || :searchQuery || '%'")
+    fun getTasks(searchQuery: String): Flow<List<Task>>
 
     @Update
     suspend fun updateTask(task: Task)

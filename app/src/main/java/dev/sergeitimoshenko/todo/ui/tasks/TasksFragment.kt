@@ -1,7 +1,10 @@
 package dev.sergeitimoshenko.todo.ui.tasks
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
@@ -10,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import dev.sergeitimoshenko.todo.R
-import dev.sergeitimoshenko.todo.databinding.FragmentSaveTaskBinding
 import dev.sergeitimoshenko.todo.databinding.FragmentTasksBinding
 import dev.sergeitimoshenko.todo.entities.Task
 import dev.sergeitimoshenko.todo.ui.TodoViewModel
@@ -55,12 +57,15 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TaskAdapter.OnItemClick
         }).attachToRecyclerView(binding.rvTasks)
 
         binding.fabAddTask.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_tasksFragment_to_saveTaskFragment)
+            Navigation.findNavController(view)
+                .navigate(R.id.action_tasksFragment_to_saveTaskFragment)
         }
 
         viewModel.tasks.observe(viewLifecycleOwner) {
             taskAdapter.submitList(it)
         }
+
+        setHasOptionsMenu(true)
     }
 
     override fun onItemClick(task: Task, view: View) {
@@ -70,5 +75,22 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TaskAdapter.OnItemClick
 
     override fun onCheckBoxClick(task: Task, isChecked: Boolean) {
         viewModel.updateTask(task.copy(completed = isChecked))
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_fragment_tasks, menu)
+
+        val searchItem = menu.findItem(R.id.actionSearch)
+        val searchView = searchItem.actionView as SearchView
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean = true
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                viewModel.searchQuery.value = newText!!
+                return true
+            }
+        })
     }
 }
