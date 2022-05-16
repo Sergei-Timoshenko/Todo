@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Todo</string>
+    <string name="fab_add_task_description">Add task</string>
+    <string name="et_title_hint">Title</string>
+    <string name="fab_save_task_description">Save task</string>
+    <string name="fab_update_task_description">Update task</string>
+</resources>

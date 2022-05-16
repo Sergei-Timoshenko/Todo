@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/tasksFragment">
+
+    <fragment
+        android:id="@+id/tasksFragment"
+        android:name="dev.sergeitimoshenko.todo.ui.tasks.TasksFragment"
+        android:label="fragment_tasks"
+        tools:layout="@layout/fragment_tasks" >
+        <action
+            android:id="@+id/action_tasksFragment_to_saveTaskFragment"
+            app:destination="@id/saveTaskFragment" />
+        <action
+            android:id="@+id/action_tasksFragment_to_updateTaskFragment"
+            app:destination="@id/updateTaskFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/saveTaskFragment"
+        android:name="dev.sergeitimoshenko.todo.ui.savetask.SaveTaskFragment"
+        android:label="fragment_save_task"
+        tools:layout="@layout/fragment_save_task" />
+    <fragment
+        android:id="@+id/updateTaskFragment"
+        android:name="dev.sergeitimoshenko.todo.ui.updatetask.UpdateTaskFragment"
+        android:label="fragment_update_task"
+        tools:layout="@layout/fragment_update_task" >
+        <argument
+            android:name="task"
+            app:argType="dev.sergeitimoshenko.todo.entities.Task" />
+    </fragment>
+</navigation>
