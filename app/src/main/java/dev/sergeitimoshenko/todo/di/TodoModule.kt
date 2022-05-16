@@ -7,6 +7,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.sergeitimoshenko.todo.db.TaskDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import javax.inject.Singleton
 
 @Module
@@ -16,14 +18,20 @@ object TodoModule {
     @Provides
     @Singleton
     fun provideTaskDatabase(
-        app: Application
+        app: Application,
+        callback: TaskDatabase.Callback
     ) = Room.databaseBuilder(
         app,
         TaskDatabase::class.java,
         "todo_database"
     ).fallbackToDestructiveMigration()
+        .addCallback(callback)
         .build()
 
     @Provides
     fun provideTaskDao(db: TaskDatabase) = db.getTaskDao()
+
+    @Provides
+    @Singleton
+    fun provideApplicationScope() = CoroutineScope(SupervisorJob())
 }
